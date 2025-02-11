@@ -1,0 +1,15 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.categories-dropdown {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    text-transform: capitalize;
+}
+
+.category-content:hover .categories-dropdown {
+    display: block;
+}
