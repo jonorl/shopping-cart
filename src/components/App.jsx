@@ -1,9 +1,12 @@
+import Header from "./Header"
+import Center from "./Center";
+
 function App() {
 
   return (
     <>
-      <p>Shopping cart project</p>
-      
+      < Header />
+      < Center />
     </>
   )
 }
