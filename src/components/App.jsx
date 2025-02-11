@@ -1,12 +1,14 @@
 import Header from "./Header"
-import Center from "./Center";
+import { Outlet } from "react-router-dom";
 
 function App() {
 
   return (
     <>
       < Header />
-      < Center />
+      < main >
+        < Outlet /> 
+      </main>
     </>
   )
 }
