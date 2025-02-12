@@ -27,19 +27,19 @@ function Categories() {
     return (
         <>
             <h2>Category: {name}</h2>
-            {!loading && (typeof (name) !== "undefined" ? (
+            {!loading  && typeof(category[0]) !== 'string' ? (
                 <div className="categories-main-dropdown">
                     {category.map((cat, index) => (
                         <ul key={index}>{cat.title}</ul>
                     ))}
                 </div>
-            ) : category && typeof category[0] === 'string' ? (
-                <div className="categories-main-dropdown">
+            ) :  (
+                <div className="categories-selection">
                     {category.map((cat, index) => (
                         <Link key={index} to={cat}>{cat}</Link>
                     ))}
                 </div>
-            ) : <p>Loading...</p>)}
+            )}
         </>
     );
 };
