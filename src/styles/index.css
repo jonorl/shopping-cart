@@ -16,3 +16,13 @@ body {
   flex-direction: column;
   justify-content: center;
 }
+
+.categories-main-dropdown {
+  text-transform: capitalize;
+}
+
+.categories-selection {
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: column;
+}
