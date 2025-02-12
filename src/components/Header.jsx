@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/Header.css"
 
 const Header = () => {
@@ -24,12 +25,12 @@ const Header = () => {
 
     return (
         <div className="header">
-            <button>Home</button>
+            <Link to="./">Home</Link>
             <div className="category-content">
-                <button className="categories-button">Categories</button>
+                <Link to="Categories">Categories</Link>
                 <div className="categories-dropdown">
                     {category.map((cat, index) => (
-                        <ul key={index}>{cat}</ul>
+                        <Link key={index} to={`Categories/${cat}`}>{cat}</Link>
                     ))}
                 </div>
             </div>

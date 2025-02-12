@@ -11,5 +11,7 @@
 }
 
 .category-content:hover .categories-dropdown {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    margin-left: 2vw;
 }
