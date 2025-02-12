@@ -18,5 +18,31 @@
 
 .products-container{
     display: grid;
+    gap: 10vh 5vw;
     grid-template-columns: auto auto;
+}
+
+.products-container>*{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    padding: 2vh 2vw;
+    border: solid aliceblue 2px;
+}
+
+img {
+    max-width: 25vw;
+    max-height: 25vh;
+}
+
+li {
+    list-style-type: none
+}
+
+.add-cart {
+    border-radius: 25px;
+    background-color:darkturquoise;
+    color: black;
 }
