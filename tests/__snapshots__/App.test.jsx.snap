@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`App component > renders correct heading 1`] = `
+<div>
+  <p>
+    Loading...
+  </p>
+  <main />
+</div>
+`;
+
+exports[`App component > renders correct heading 2`] = `
+<div>
+  <p>
+    Loading...
+  </p>
+  <main />
+</div>
+`;
+
+exports[`App component > renders snapshot 1`] = `
+<div>
+  <p>
+    Loading...
+  </p>
+  <main />
+</div>
+`;

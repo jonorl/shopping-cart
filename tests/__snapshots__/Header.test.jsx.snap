@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Header component > Renders snapshot 1`] = `
+<div>
+  <p>
+    Loading...
+  </p>
+</div>
+`;
+
+exports[`Header component > renders snapshot 1`] = `
+<div>
+  <p>
+    Loading...
+  </p>
+</div>
+`;
+
+exports[`renders snapshot 1`] = `
+<div>
+  <p>
+    Loading...
+  </p>
+</div>
+`;

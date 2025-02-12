@@ -28,9 +28,15 @@ function Categories() {
         <>
             <h2>Category: {name}</h2>
             {!loading  && typeof(category[0]) !== 'string' ? (
-                <div className="categories-main-dropdown">
+                <div className="products-container">
                     {category.map((cat, index) => (
-                        <ul key={index}>{cat.title}</ul>
+                        <ul className="product-card" data-index-number={index} key={index}>
+                            <li >{cat.title}</li>
+                            <li >{cat.description}</li>
+                            <li >{cat.price}</li>
+                            <img src={cat.image} alt="" />
+                        </ul>
+                        
                     ))}
                 </div>
             ) :  (

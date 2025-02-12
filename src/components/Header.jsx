@@ -27,7 +27,7 @@ const Header = () => {
         <div className="header">
             <Link to="./">Home</Link>
             <div className="category-content">
-                <Link to="Categories">Categories</Link>
+                <Link className="categories-header" to="Categories">Categories</Link>
                 <div className="categories-dropdown">
                     {category.map((cat, index) => (
                         <Link key={index} to={`Categories/${cat}`}>{cat}</Link>

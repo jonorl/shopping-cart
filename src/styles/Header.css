@@ -15,3 +15,8 @@
     flex-direction: column;
     margin-left: 2vw;
 }
+
+.products-container{
+    display: grid;
+    grid-template-columns: auto auto;
+}
