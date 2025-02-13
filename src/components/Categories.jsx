@@ -50,7 +50,7 @@ function Categories() {
     return (
         <>
 
-            <h2>Category: {name}</h2>
+            <h2 className="category-header">Category: {name}</h2>
             {!loading && typeof (category[0]) !== 'string' ? (
                 <div className="products-container">
                     {category.map((cat, index) => (
@@ -59,12 +59,12 @@ function Categories() {
                             <p className="product-descrpition">{cat.description}</p>
                             <p className="product-price">£{cat.price}</p>
                             <div className="add-to-cart" key={index}>
-                                <button onClick={() => handleQuantitySubtract(item[index].id)} className="subtract">-</button>
+                                <button onClick={() => handleQuantitySubtract(item[index].id)} className="subtract">–</button>
                                 <button className="quantity">{item[index].quantity}</button>
                                 <button onClick={() => handleQuantityAdd(item[index].id)} className="add">+</button>
                             </div>
                             <button className="add-cart">Add to cart</button>
-                            <img src={cat.image} alt="" />
+                            <img className="product-image" src={cat.image} alt="" />
                         </ul>
 
                     ))}
