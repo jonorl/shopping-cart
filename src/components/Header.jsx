@@ -39,9 +39,12 @@ const Header = () => {
                     ))}
                 </div>
             </div>
-            <button onClick={handleShowModal}>Shopping cart</button>
+            <div className="shopping-cart">
+            <i onClick={handleShowModal} className="fa fa-shopping-cart"></i>
+            <a className="icon-shopping-cart"><div className="shopping-total">3</div></a>
+            </div>
             {showModal && (
-                <div className="modal-overlay"> 
+                <div className="modal-overlay">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h2>Your Shopping Basket</h2>
@@ -55,6 +58,7 @@ const Header = () => {
                     </div>
                 </div>
             )}
+
         </div>
     )
 }
