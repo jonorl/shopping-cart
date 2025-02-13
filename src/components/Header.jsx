@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css"
 
+
 const Header = () => {
     const [category, setCategory] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShowModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         fetch("https://fakestoreapi.com/products/categories", { mode: "cors" })
@@ -34,7 +39,22 @@ const Header = () => {
                     ))}
                 </div>
             </div>
-            <button>Shopping cart</button>
+            <button onClick={handleShowModal}>Shopping cart</button>
+            {showModal && (
+                <div className="modal-overlay"> 
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>Your Shopping Basket</h2>
+                        </div>
+                        <div className="modal-body">
+                            <p>Items go dynamically here</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button onClick={handleCloseModal}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

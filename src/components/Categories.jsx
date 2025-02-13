@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
 
+
 function Categories() {
     const { name } = useParams();
     const [category, setCategory] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [item, setItem] = useState([])
+
 
     const handleQuantityAdd = (id) => {
         setItem((prevItems) =>
