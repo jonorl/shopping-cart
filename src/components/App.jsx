@@ -18,9 +18,7 @@ function App() {
     const triggerShoppingIcon = item.some(itm => itm.quantity > 0);
     triggerShoppingIcon ? setShowIcon(true) : setShowIcon(false)
     const countGreaterThanZero = item.filter(itm => itm.quantity > 0).length;
-    console.log(countGreaterThanZero)
     countGreaterThanZero > 0 && setIconCount(countGreaterThanZero)
-    console.log(iconCount)
   }
 
   const handleQuantityAdd = (id) => {
@@ -71,7 +69,7 @@ function App() {
 
   return (
     <>
-      <Header showIcon={showIcon} iconCount={iconCount} />
+      <Header showIcon={showIcon} iconCount={iconCount} category={category}error={error} loading={loading}  />
       <main>
         <Outlet
           context={{
