@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css"
 
-
-const Header = () => {
+const Header = ({showIcon, iconCount}) => {
+    console.log(showIcon)
     const [category, setCategory] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -30,6 +30,7 @@ const Header = () => {
 
     return (
         <div className="header">
+            {console.log(iconCount)}
             <Link to="./">Home</Link>
             <div className="category-content">
                 <Link className="categories-header" to="Categories">Categories</Link>
@@ -41,7 +42,7 @@ const Header = () => {
             </div>
             <div className="shopping-cart">
             <i onClick={handleShowModal} className="fa fa-shopping-cart"></i>
-            <a className="icon-shopping-cart"><div className="shopping-total">3</div></a>
+            {showIcon && <a className="icon-shopping-cart"><div className="shopping-total">{iconCount}</div></a>}
             </div>
             {showModal && (
                 <div className="modal-overlay">

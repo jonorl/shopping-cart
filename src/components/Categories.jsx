@@ -8,6 +8,7 @@ function Categories() {
     item,
     handleQuantityAdd,
     handleQuantitySubtract,
+    addToCart,
     error
   } = useOutletContext();
 
@@ -35,7 +36,7 @@ function Categories() {
                   className="add"
                 >+</button>
               </div>
-              <button className="add-cart">Add to cart</button>
+              <button onClick={addToCart} className="add-cart">Add to cart</button>
               <img className="product-image" src={cat.image} alt="" />
             </ul>
           ))}
