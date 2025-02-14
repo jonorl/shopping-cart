@@ -40,7 +40,6 @@ function App() {
   }
 
   const removeItem = (id) => {
-    console.log("remove")
     setItem((prevItems) =>
       prevItems.map((item) =>
         item.id === id ? { ...item, quantity: 0 } : item

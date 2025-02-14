@@ -9,9 +9,9 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />, 
-    children: [ // Add children for nested routes
+    children: [ 
         {
-          index: true, // This makes Home the default route for "/"
+          index: true,
           element: <Home />,
         },
         {

@@ -30,7 +30,6 @@ const Header = ({ showIcon, iconCount, error, loading, item, totalPrice, TotalQu
 
     return (
         <div className="header">
-            {console.log(item.filter(itm => itm.quantity !== 0))}
             <Link to="./">Home</Link>
             <div className="category-content">
                 <Link className="categories-header" to="Categories">Categories</Link>
