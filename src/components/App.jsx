@@ -11,6 +11,8 @@ function App() {
   const [item, setItem] = useState([]);
   const [showIcon, setShowIcon] = useState(false)
   const [iconCount, setIconCount] = useState(0)
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [TotalQuantity, setTotalQuantity] = useState(0)
   const pathParts = location.pathname.split('/');
   const categoryName = pathParts[2];
 
@@ -36,6 +38,29 @@ function App() {
       )
     );
   }
+
+  const removeItem = (id) => {
+    console.log("remove")
+    setItem((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: 0 } : item
+      )
+    );
+  };
+
+      // Get the total money to pay
+      useEffect(() => {
+        let addedVal = 0
+        showIcon && item.filter(itm => itm.quantity !== 0).map((itm) => (addedVal = addedVal + itm.quantity*itm.price))
+        setTotalPrice(addedVal.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))} // Regex to add comma separator for thousands!
+    ,[showIcon, item]);
+
+    // Get the total quantity amount
+    useEffect(() => {
+        let addedQuantity = 0
+        showIcon && item.filter(itm => itm.quantity !== 0).map((itm) => (addedQuantity = addedQuantity + itm.quantity))
+        setTotalQuantity(addedQuantity)}
+    ,[showIcon, item]);
 
   useEffect(() => {
     setLoading(true);
@@ -69,7 +94,7 @@ function App() {
 
   return (
     <>
-      <Header showIcon={showIcon} iconCount={iconCount} category={category}error={error} loading={loading} item={item} />
+      <Header showIcon={showIcon} iconCount={iconCount} error={error} loading={loading} item={item} totalPrice={totalPrice} TotalQuantity={TotalQuantity} removeItem={removeItem} />
       <main>
         <Outlet
           context={{

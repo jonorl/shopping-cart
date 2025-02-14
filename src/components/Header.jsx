@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css"
 
-const Header = ({ showIcon, iconCount, category, error, loading, item }) => {
+const Header = ({ showIcon, iconCount, error, loading, item, totalPrice, TotalQuantity, removeItem }) => {
 
     const [categoryDropdown, setCategoryDropdown] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
+
+    const checkout = () => {
+        alert("Checkout function coming soon!")
+    };
 
     useEffect(() => {
         fetch("https://fakestoreapi.com/products/categories", { mode: "cors" })
@@ -59,12 +63,17 @@ const Header = ({ showIcon, iconCount, category, error, loading, item }) => {
                                     <p className="product-title">{itm.title}</p>
                                     <p className="product-price">£{itm.price}</p>
                                     <p className="product-quantity">{itm.quantity}</p>
-                                    <i className="fa fa-trash-o"></i>
+                                    <i onClick={() => removeItem(itm.id)} className="fa fa-trash-o"></i>
                                 </>
                             ))}
+                            {showIcon && <>
+                                <h2 className="total-table-bottom">Total</h2>
+                                <h2 className="Price-table-bottom">£{totalPrice}</h2>
+                                <h2 className="quantity-table-bottom">{TotalQuantity}</h2>
+                            </>}
                         </div>
                         <div className="modal-footer">
-                            <button onClick={'#'}>Checkout</button>
+                            <button onClick={checkout}>Checkout</button>
                             <button onClick={handleCloseModal}>Close</button>
                         </div>
                     </div>
