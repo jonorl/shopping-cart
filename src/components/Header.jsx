@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css"
 
-const Header = ({ showIcon, iconCount, category, error, loading}) => {
+const Header = ({ showIcon, iconCount, category, error, loading, item }) => {
 
     const [categoryDropdown, setCategoryDropdown] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -26,7 +26,7 @@ const Header = ({ showIcon, iconCount, category, error, loading}) => {
 
     return (
         <div className="header">
-            {console.log(iconCount)}
+            {console.log(item.filter(itm => itm.quantity !== 0))}
             <Link to="./">Home</Link>
             <div className="category-content">
                 <Link className="categories-header" to="Categories">Categories</Link>
@@ -47,14 +47,24 @@ const Header = ({ showIcon, iconCount, category, error, loading}) => {
                             <h2>Your Shopping Basket</h2>
                         </div>
                         <div className="modal-body">
-                        <h1>Your Shopping basket</h1>
-                            {category.filter(cat => cat.quantity !== '0').map((cat, index) => (
-                                    <ul className="product-card" data-index-number={index} key={index}>
-                                        <h2 className="product-title">{cat.title}</h2>
-                                    </ul>
+                            {!showIcon && <h1>Your Shopping basket is empty!</h1>}
+                            {showIcon && <>
+                                <h2 className="item-table-header">Item</h2>
+                                <h2 className="price-table-header">Price</h2>
+                                <h2 className="quantity-table-header">Quantity</h2>
+                                <h2 className="remove-table-header">Remove</h2>
+                            </>}
+                            {showIcon && item.filter(itm => itm.quantity !== 0).map((itm) => (
+                                <>
+                                    <p className="product-title">{itm.title}</p>
+                                    <p className="product-price">£{itm.price}</p>
+                                    <p className="product-quantity">{itm.quantity}</p>
+                                    <i className="fa fa-trash-o"></i>
+                                </>
                             ))}
                         </div>
                         <div className="modal-footer">
+                            <button onClick={'#'}>Checkout</button>
                             <button onClick={handleCloseModal}>Close</button>
                         </div>
                     </div>

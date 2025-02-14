@@ -69,7 +69,7 @@ function App() {
 
   return (
     <>
-      <Header showIcon={showIcon} iconCount={iconCount} category={category}error={error} loading={loading}  />
+      <Header showIcon={showIcon} iconCount={iconCount} category={category}error={error} loading={loading} item={item} />
       <main>
         <Outlet
           context={{
