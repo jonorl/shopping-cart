@@ -62,11 +62,11 @@ function App() {
       prevItems.map(basket =>
         basket.id === id ? {...basket, quantity: 0} : basket
       ))
-    totalQuantity === 0 && setShowIcon(false)
+      const countGreaterThanZero = basket.filter(itm => itm.quantity > 0).length;
+      countGreaterThanZero > 0 && setIconCount(countGreaterThanZero)
   };
 
   useEffect(() => {
-    console.log(basket.length)
     basket.length === 0 && setShowIcon(false)
   },[basket])
  
@@ -116,7 +116,17 @@ function App() {
               }))
               : response;
 
-        setItem(processedResponse)
+
+        // Testing potential fix
+
+        setItem((prevItems) => {
+          const newItems = processedResponse.filter(newItem => {
+              return !prevItems.some(existingItem => existingItem.id === newItem.id);
+          });
+          return [...prevItems, ...newItems];
+      });
+
+        // setItem(processedResponse)
         setBasket((prevBasket) => {
           const newItems = processedResponse.filter(newItem => {
               return !prevBasket.some(existingItem => existingItem.id === newItem.id);

@@ -14,29 +14,32 @@ function Categories() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>A network error was encountered</p>;
-  
+
   return (
     <>
       {name && <h2 className="category-header">Category: {name}</h2>}
       {category && typeof (category[0]) !== 'string' ? (
         <div className="products-container">
-          {category.map((cat, index) => (
-            <ul className="product-card" data-index-number={index} key={index}>
+          {category.map((cat) => (
+            <ul className="product-card" data-index-number={cat.id} key={cat.id}>
+              {console.log(cat)}
               <h2 className="product-title">{cat.title}</h2>
               <p className="product-descrpition">{cat.description}</p>
               <p className="product-price">£{cat.price}</p>
-              <div className="add-to-cart" key={index}>
-                <button 
-                  onClick={() => handleQuantitySubtract(item[index].id)} 
+              <div className="add-to-cart" key={cat.id}>
+                <button
+                  onClick={() => handleQuantitySubtract(cat.id)}
                   className="subtract"
                 >–</button>
-                <button className="quantity">{item[index].quantity}</button>
-                <button 
-                  onClick={() => handleQuantityAdd(item[index].id)} 
+                {item.filter((itm) => itm.id === cat.id).map((itm) => (
+                  <button key={itm.id} className="quantity">{itm.quantity === 0 ? 0 : itm.quantity}</button>
+                ))}
+                <button
+                  onClick={() => handleQuantityAdd(cat.id)}
                   className="add"
                 >+</button>
               </div>
-              <button onClick={() => addToCart(item[index].id)} className="add-cart">Add to cart</button>
+              <button onClick={() => addToCart(cat.id)} className="add-cart">Add to cart</button>
               <img className="product-image" src={cat.image} alt="" />
             </ul>
           ))}
