@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css"
 
-const Header = ({ showIcon, iconCount, error, loading, item, totalPrice, TotalQuantity, removeItem }) => {
+const Header = ({ showIcon, iconCount, error, loading, totalPrice, totalQuantity, removeItem, basket }) => {
 
     const [categoryDropdown, setCategoryDropdown] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -49,37 +49,55 @@ const Header = ({ showIcon, iconCount, error, loading, item, totalPrice, TotalQu
                         <div className="modal-header">
                             <h2>Your Shopping Basket</h2>
                         </div>
-                        <div className="modal-body">
-                            {!showIcon && <h1>Your Shopping basket is empty!</h1>}
-                            {showIcon && <>
-                                <h2 className="item-table-header">Item</h2>
-                                <h2 className="price-table-header">Price</h2>
-                                <h2 className="quantity-table-header">Quantity</h2>
-                                <h2 className="remove-table-header">Remove</h2>
-                            </>}
-                            {showIcon && item.filter(itm => itm.quantity !== 0).map((itm) => (
-                                <>
-                                    <p className="product-title">{itm.title}</p>
-                                    <p className="product-price">£{itm.price}</p>
-                                    <p className="product-quantity">{itm.quantity}</p>
-                                    <i onClick={() => removeItem(itm.id)} className="fa fa-trash-o"></i>
-                                </>
-                            ))}
-                            {showIcon && <>
-                                <h2 className="total-table-bottom">Total</h2>
-                                <h2 className="Price-table-bottom">£{totalPrice}</h2>
-                                <h2 className="quantity-table-bottom">{TotalQuantity}</h2>
-                            </>}
-                        </div>
-                        <div className="modal-footer">
-                            <button onClick={checkout}>Checkout</button>
-                            <button onClick={handleCloseModal}>Close</button>
-                        </div>
+                        {showIcon && basket.filter(itm => itm.quantity !== 0).length > 0 && (
+                            <>
+                                <table className="products-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="item-table-header">Item</th>
+                                            <th className="price-table-header">Price</th>
+                                            <th className="quantity-table-header">Quantity</th>
+                                            <th className="remove-table-header">Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {showIcon && basket
+                                            .filter((itm) => itm.quantity !== 0)
+                                            .map((itm) => (
+                                                    <tr className="modal-body item-row" key={itm.id}>
+                                                        <td className="product-title">{itm.title}</td>
+                                                        <td className="product-price">£{itm.price}</td>
+                                                        <td className="product-quantity">{itm.quantity}</td>
+                                                        <td><i onClick={() => removeItem(itm.id)} className="fa fa-trash-o"></i></td>
+                                                    </tr>
+                                            ))}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th className="item-table-footer">Total</th>
+                                            <th className="price-table-footer">£{totalPrice}</th>
+                                            <th className="product-quantity">{totalQuantity}</th>
+                                            <th className="remove-table-footer"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </>
+                        )}
+
+                        {!showIcon && basket.filter(itm => itm.quantity !== 0).length === 0 &&
+                            <h1>Your Shopping basket is empty!</h1>
+                        }
+
+                    </div>
+                    <div className="modal-footer">
+                        <button onClick={checkout}>Checkout</button>
+                        <button onClick={handleCloseModal}>Close</button>
                     </div>
                 </div>
-            )}
+            )
+            }
 
-        </div>
+        </div >
     )
 }
 
