@@ -14,13 +14,14 @@ function App() {
   const [iconCount, setIconCount] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
   const [totalQuantity, setTotalQuantity] = useState(0)
+  const [previousResponse, setPreviousResponse] = useState(null);
   const pathParts = location.pathname.split('/');
   const categoryName = pathParts[2];
 
   const addToCart = () => {
-    const triggerShoppingIcon = item.some(itm => itm.quantity > 0);
+    const triggerShoppingIcon = basket.some(itm => itm.quantity > 0);
     triggerShoppingIcon ? setShowIcon(true) : setShowIcon(false)
-    const countGreaterThanZero = item.filter(itm => itm.quantity > 0).length;
+    const countGreaterThanZero = basket.filter(itm => itm.quantity > 0).length;
     countGreaterThanZero > 0 && setIconCount(countGreaterThanZero)
   }
 
@@ -48,6 +49,7 @@ function App() {
         basket.id === id && basket.quantity > 0 ? { ...basket, quantity: basket.quantity - 1 } : basket
       )
     );
+    basket.length === 0 && setShowIcon(false)
   }
 
   const removeItem = (id) => {
@@ -60,24 +62,34 @@ function App() {
       prevItems.map(basket =>
         basket.id === id ? {...basket, quantity: 0} : basket
       ))
-    basket.length === 0 && setShowIcon(false)
+    totalQuantity === 0 && setShowIcon(false)
   };
 
+  useEffect(() => {
+    console.log(basket.length)
+    basket.length === 0 && setShowIcon(false)
+  },[basket])
+ 
   // Get the total money to pay
   useEffect(() => {
     let addedVal = 0
-    showIcon && item.filter(itm => itm.quantity !== 0).map((itm) => (addedVal = addedVal + itm.quantity * itm.price))
+    showIcon && basket.filter(itm => itm.quantity !== 0).map((itm) => (addedVal = addedVal + itm.quantity * itm.price))
     setTotalPrice(addedVal.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
   } // Regex to add comma separator for thousands!
-    , [showIcon, item]);
+    , [showIcon, basket]);
 
   // Get the total quantity amount
   useEffect(() => {
     let addedQuantity = 0
-    showIcon && item.filter(itm => itm.quantity !== 0).map((itm) => (addedQuantity = addedQuantity + itm.quantity))
+    showIcon && basket.filter(itm => itm.quantity !== 0).map((itm) => (addedQuantity = addedQuantity + itm.quantity))
     setTotalQuantity(addedQuantity)
   }
-    , [showIcon, item]);
+    , [showIcon, basket]);
+
+  useEffect(() => {
+    totalQuantity > 0 ? setShowIcon(true) :setShowIcon(false)}
+    ,[totalQuantity]
+  )
 
   useEffect(() => {
     setLoading(true);
@@ -94,21 +106,29 @@ function App() {
         return response.json();
       })
       .then((response) => {
-        // If we're fetching products (not categories), add quantity
-        const processedResponse = Array.isArray(response) && typeof response[0] !== 'string'
-          ? response.map((item) => ({
-            ...item,
-            quantity: 0,
-          }))
-          : response;
+        if (JSON.stringify(response) !== JSON.stringify(previousResponse)) {
+          setPreviousResponse(response);
+
+          const processedResponse = Array.isArray(response) && typeof response[0] !== 'string'
+              ? response.map((item) => ({
+                  ...item,
+                  quantity: item.quantity !== undefined ? item.quantity : 0,
+              }))
+              : response;
 
         setItem(processedResponse)
-        item.length === 0 && setBasket(processedResponse)
+        setBasket((prevBasket) => {
+          const newItems = processedResponse.filter(newItem => {
+              return !prevBasket.some(existingItem => existingItem.id === newItem.id);
+          });
+          return [...prevBasket, ...newItems];
+      });
         setCategory(response);
-      })
+      }
+    })
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
-  }, [categoryName, item.length]);
+  }, [categoryName, previousResponse]);
 
   return (
     <>

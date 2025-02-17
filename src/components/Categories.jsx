@@ -36,7 +36,7 @@ function Categories() {
                   className="add"
                 >+</button>
               </div>
-              <button onClick={addToCart} className="add-cart">Add to cart</button>
+              <button onClick={() => addToCart(item[index].id)} className="add-cart">Add to cart</button>
               <img className="product-image" src={cat.image} alt="" />
             </ul>
           ))}

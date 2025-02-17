@@ -84,7 +84,7 @@ const Header = ({ showIcon, iconCount, error, loading, totalPrice, totalQuantity
                             </>
                         )}
 
-                        {!showIcon && basket.filter(itm => itm.quantity !== 0).length === 0 &&
+                        {!showIcon && 
                             <h1>Your Shopping basket is empty!</h1>
                         }
 
