@@ -40,7 +40,7 @@ function Categories() {
                           : basketItem 
                       )
                     );
-                  }} className="quantity" placeholder={itm.quantity}></input>
+                  }} className="quantity" value={itm.quantity}></input>
                 ))}
                 <button
                   onClick={() => handleQuantityAdd(cat.id)}
