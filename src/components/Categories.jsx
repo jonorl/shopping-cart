@@ -10,8 +10,6 @@ function Categories() {
     handleQuantitySubtract,
     addToCart,
     error,
-    userQuantity,
-    setUserQuantity,
     setBasket
   } = useOutletContext();
 

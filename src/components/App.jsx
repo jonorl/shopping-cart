@@ -9,7 +9,6 @@ function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [basket, setBasket] = useState([]) // This is for showing in the basket
-  const [userQuantity, setUserQuantity] = useState(0)
   const [showIcon, setShowIcon] = useState(false) // display the basket when items are added
   const [iconCount, setIconCount] = useState(0) // display the amount of items in basket
   const [totalPrice, setTotalPrice] = useState(0) // total display for checkout basket
@@ -22,6 +21,8 @@ function App() {
 
   const addToCart = (id) => {
 
+    // Updates the basket with whatever amount there is
+
     setBasket((prevItems) =>
       prevItems.map((basket) =>
         basket.id === id ? { ...basket, quantity: basket.quantity } : basket
@@ -32,14 +33,6 @@ function App() {
     const triggerShoppingIcon = basket.some((itm) => itm.quantity > 0);
     setShowIcon(triggerShoppingIcon);
   }
-
-  useEffect(() => {
-
-    // Check how many items are over quantity 0 and display the right amount.
-    const countGreaterThanZero = basket.filter((itm) => itm.quantity > 0).length;
-    setIconCount(countGreaterThanZero > 0 ? countGreaterThanZero : 0); // Ensure iconCount is 0 if no items
-  }, [basket]); // Run this effect whenever the basket changes
-
 
   const handleQuantityAdd = (id) => {
 
@@ -69,6 +62,14 @@ function App() {
     );
   };
 
+  useEffect(() => {
+
+    // Check how many items are over quantity 0 and display the right amount.
+    const countGreaterThanZero = basket.filter((itm) => itm.quantity > 0).length;
+    setIconCount(countGreaterThanZero > 0 ? countGreaterThanZero : 0); // Ensure iconCount is 0 if no items
+  }, [basket]); // Run this effect whenever the basket changes
+
+
   // Get the total money to pay
   useEffect(() => {
     let addedVal = 0
@@ -85,15 +86,19 @@ function App() {
   }
     , [showIcon, basket]);
 
+
+  // Checks if all items were removed in the basket and hides the quantity icon.
   useEffect(() => {
     totalQuantity > 0 ? setShowIcon(true) : setShowIcon(false)
   }
     , [totalQuantity]
   )
 
+  // API data fetching
   useEffect(() => {
     setLoading(true);
 
+    // Either get category or categories
     const fetchUrl = categoryName
       ? `https://fakestoreapi.com/products/category/${categoryName.toLowerCase()}`
       : 'https://fakestoreapi.com/products/categories';
@@ -116,6 +121,8 @@ function App() {
             }))
             : response;
 
+          // Set the basket to ALL categories plus add quantities and default them to 0 if undefined.
+
           setBasket((prevBasket) => {
             const newItems = processedResponse.filter(newItem => {
               return !prevBasket.some(existingItem => existingItem.id === newItem.id);
@@ -128,6 +135,8 @@ function App() {
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
   }, [categoryName, previousResponse]);
+
+  // Outlet needs to pass props differently!
 
   return (
     <>
@@ -143,8 +152,6 @@ function App() {
             handleQuantitySubtract,
             addToCart,
             error,
-            userQuantity,
-            setUserQuantity,
             setBasket
           }}
         />

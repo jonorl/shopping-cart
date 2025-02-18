@@ -14,6 +14,8 @@ const Header = ({ showIcon, iconCount, error, loading, totalPrice, totalQuantity
         alert("Checkout function coming soon!")
     };
 
+    // Get the categories for the header dropdown
+
     useEffect(() => {
         fetch("https://fakestoreapi.com/products/categories", { mode: "cors" })
             .then((response) => {
@@ -64,12 +66,12 @@ const Header = ({ showIcon, iconCount, error, loading, totalPrice, totalQuantity
                                         {showIcon && basket
                                             .filter((itm) => itm.quantity !== 0)
                                             .map((itm) => (
-                                                    <tr className="modal-body item-row" key={itm.id}>
-                                                        <td className="product-title">{itm.title}</td>
-                                                        <td className="product-price">£{itm.price}</td>
-                                                        <td className="product-quantity">{itm.quantity}</td>
-                                                        <td><i onClick={() => removeItem(itm.id)} className="fa fa-trash-o"></i></td>
-                                                    </tr>
+                                                <tr className="modal-body item-row" key={itm.id}>
+                                                    <td className="product-title">{itm.title}</td>
+                                                    <td className="product-price">£{itm.price}</td>
+                                                    <td className="product-quantity">{itm.quantity}</td>
+                                                    <td><i onClick={() => removeItem(itm.id)} className="fa fa-trash-o"></i></td>
+                                                </tr>
                                             ))}
                                     </tbody>
                                     <tfoot>
@@ -84,7 +86,7 @@ const Header = ({ showIcon, iconCount, error, loading, totalPrice, totalQuantity
                             </>
                         )}
 
-                        {!showIcon && 
+                        {!showIcon &&
                             <h1>Your Shopping basket is empty!</h1>
                         }
 
