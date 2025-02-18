@@ -18,7 +18,7 @@ function Categories() {
 
   return (
     <>
-      {name && <h2 className="category-header">Category: {name}</h2>}
+      {name && <h2 className="category-header">Category: {decodeURIComponent(name)}</h2>} {/* decode fix to avoid things like %20 */}
       {category && typeof (category[0]) !== 'string' ? (
         <div className="products-container">
           {category.map((cat) => (
