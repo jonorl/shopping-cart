@@ -5,32 +5,44 @@ import { useLocation } from 'react-router-dom';
 
 function App() {
   const location = useLocation();
-  const [category, setCategory] = useState([]);
+  const [category, setCategory] = useState([]); // This is for showing in categories
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [item, setItem] = useState([]);
-  const [basket, setBasket] = useState([])
-  const [showIcon, setShowIcon] = useState(false)
-  const [iconCount, setIconCount] = useState(0)
-  const [totalPrice, setTotalPrice] = useState(0)
-  const [totalQuantity, setTotalQuantity] = useState(0)
-  const [previousResponse, setPreviousResponse] = useState(null);
+  const [basket, setBasket] = useState([]) // This is for showing in the basket
+  const [userQuantity, setUserQuantity] = useState(0)
+  const [showIcon, setShowIcon] = useState(false) // display the basket when items are added
+  const [iconCount, setIconCount] = useState(0) // display the amount of items in basket
+  const [totalPrice, setTotalPrice] = useState(0) // total display for checkout basket
+  const [totalQuantity, setTotalQuantity] = useState(0) // total display for checkout basket
+  const [previousResponse, setPreviousResponse] = useState(null); // helper hook to add/remove array of items to basket
+
+  // This is to do with router Outlet
   const pathParts = location.pathname.split('/');
   const categoryName = pathParts[2];
 
-  const addToCart = () => {
-    const triggerShoppingIcon = basket.some(itm => itm.quantity > 0);
-    triggerShoppingIcon ? setShowIcon(true) : setShowIcon(false)
-    const countGreaterThanZero = basket.filter(itm => itm.quantity > 0).length;
-    countGreaterThanZero > 0 && setIconCount(countGreaterThanZero)
-  }
+  const addToCart = (id) => {
 
-  const handleQuantityAdd = (id) => {
-    setItem((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+    setBasket((prevItems) =>
+      prevItems.map((basket) =>
+        basket.id === id ? { ...basket, quantity: basket.quantity } : basket
       )
     );
+
+    // Check if any items are over quantity 0 and then trigger the showIcon to flag there are items.
+    const triggerShoppingIcon = basket.some((itm) => itm.quantity > 0);
+    setShowIcon(triggerShoppingIcon);
+  }
+
+  useEffect(() => {
+
+    // Check how many items are over quantity 0 and display the right amount.
+    const countGreaterThanZero = basket.filter((itm) => itm.quantity > 0).length;
+    setIconCount(countGreaterThanZero > 0 ? countGreaterThanZero : 0); // Ensure iconCount is 0 if no items
+  }, [basket]); // Run this effect whenever the basket changes
+
+
+  const handleQuantityAdd = (id) => {
+
     setBasket((prevItems) =>
       prevItems.map((basket) =>
         basket.id === id ? { ...basket, quantity: basket.quantity + 1 } : basket
@@ -39,11 +51,7 @@ function App() {
   };
 
   const handleQuantitySubtract = (id) => {
-    setItem((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id && item.quantity > 0 ? { ...item, quantity: item.quantity - 1 } : item
-      )
-    );
+
     setBasket((prevItems) =>
       prevItems.map((basket) =>
         basket.id === id && basket.quantity > 0 ? { ...basket, quantity: basket.quantity - 1 } : basket
@@ -53,23 +61,14 @@ function App() {
   }
 
   const removeItem = (id) => {
-    setItem((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: 0 } : item
-      )),
 
     setBasket((prevItems) =>
       prevItems.map(basket =>
-        basket.id === id ? {...basket, quantity: 0} : basket
-      ))
-      const countGreaterThanZero = basket.filter(itm => itm.quantity > 0).length;
-      countGreaterThanZero > 0 && setIconCount(countGreaterThanZero)
+        basket.id === id ? { ...basket, quantity: 0 } : basket
+      )
+    );
   };
 
-  useEffect(() => {
-    basket.length === 0 && setShowIcon(false)
-  },[basket])
- 
   // Get the total money to pay
   useEffect(() => {
     let addedVal = 0
@@ -87,8 +86,9 @@ function App() {
     , [showIcon, basket]);
 
   useEffect(() => {
-    totalQuantity > 0 ? setShowIcon(true) :setShowIcon(false)}
-    ,[totalQuantity]
+    totalQuantity > 0 ? setShowIcon(true) : setShowIcon(false)
+  }
+    , [totalQuantity]
   )
 
   useEffect(() => {
@@ -110,50 +110,42 @@ function App() {
           setPreviousResponse(response);
 
           const processedResponse = Array.isArray(response) && typeof response[0] !== 'string'
-              ? response.map((item) => ({
-                  ...item,
-                  quantity: item.quantity !== undefined ? item.quantity : 0,
-              }))
-              : response;
+            ? response.map((basket) => ({
+              ...basket,
+              quantity: basket.quantity !== undefined ? basket.quantity : 0,
+            }))
+            : response;
 
-
-        // Testing potential fix
-
-        setItem((prevItems) => {
-          const newItems = processedResponse.filter(newItem => {
-              return !prevItems.some(existingItem => existingItem.id === newItem.id);
-          });
-          return [...prevItems, ...newItems];
-      });
-
-        // setItem(processedResponse)
-        setBasket((prevBasket) => {
-          const newItems = processedResponse.filter(newItem => {
+          setBasket((prevBasket) => {
+            const newItems = processedResponse.filter(newItem => {
               return !prevBasket.some(existingItem => existingItem.id === newItem.id);
+            });
+            return [...prevBasket, ...newItems];
           });
-          return [...prevBasket, ...newItems];
-      });
-        setCategory(response);
-      }
-    })
+          setCategory(response);
+        }
+      })
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
   }, [categoryName, previousResponse]);
 
   return (
     <>
-      <Header showIcon={showIcon} iconCount={iconCount} error={error} loading={loading} item={item} totalPrice={totalPrice} totalQuantity={totalQuantity} removeItem={removeItem} basket={basket} />
+      <Header showIcon={showIcon} iconCount={iconCount} error={error} loading={loading} basket={basket} totalPrice={totalPrice} totalQuantity={totalQuantity} removeItem={removeItem} />
       <main>
         <Outlet
           context={{
             loading,
             category,
             name: categoryName,
-            item,
+            basket,
             handleQuantityAdd,
             handleQuantitySubtract,
             addToCart,
-            error
+            error,
+            userQuantity,
+            setUserQuantity,
+            setBasket
           }}
         />
       </main>

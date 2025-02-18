@@ -5,11 +5,14 @@ function Categories() {
     loading,
     category,
     name,
-    item,
+    basket,
     handleQuantityAdd,
     handleQuantitySubtract,
     addToCart,
-    error
+    error,
+    userQuantity,
+    setUserQuantity,
+    setBasket
   } = useOutletContext();
 
   if (loading) return <p>Loading...</p>;
@@ -22,7 +25,6 @@ function Categories() {
         <div className="products-container">
           {category.map((cat) => (
             <ul className="product-card" data-index-number={cat.id} key={cat.id}>
-              {console.log(cat)}
               <h2 className="product-title">{cat.title}</h2>
               <p className="product-descrpition">{cat.description}</p>
               <p className="product-price">£{cat.price}</p>
@@ -31,8 +33,16 @@ function Categories() {
                   onClick={() => handleQuantitySubtract(cat.id)}
                   className="subtract"
                 >–</button>
-                {item.filter((itm) => itm.id === cat.id).map((itm) => (
-                  <button key={itm.id} className="quantity">{itm.quantity === 0 ? 0 : itm.quantity}</button>
+                {basket.filter((itm) => itm.id === cat.id).map((itm) => (
+                  <input key={itm.id} type="number" onChange={(event) => {
+                    setBasket((prevBasket) =>
+                      prevBasket.map((basketItem) =>
+                        basketItem.id === itm.id
+                          ? { ...basketItem, quantity: parseInt(event.target.value) } // Update quantity
+                          : basketItem 
+                      )
+                    );
+                  }} className="quantity" placeholder={itm.quantity}></input>
                 ))}
                 <button
                   onClick={() => handleQuantityAdd(cat.id)}

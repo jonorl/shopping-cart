@@ -75,3 +75,18 @@ li {
   margin-left: 2px;
   margin-right: 2px;
 }
+
+input.quantity {
+  field-sizing: content;
+  box-sizing: border-box;
+  min-width: 4ch;
+  max-width: 4ch;
+  text-align: center;
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input.quantity::-webkit-outer-spin-button,
+input.quantity::-webkit-inner-spin-button {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  margin: 0;
+}
