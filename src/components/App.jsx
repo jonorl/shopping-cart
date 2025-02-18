@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 
 function App() {
-  const location = useLocation();
+  const location = useLocation(); // for Router
   const [category, setCategory] = useState([]); // This is for showing in categories
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,8 +13,7 @@ function App() {
   const [iconCount, setIconCount] = useState(0) // display the amount of items in basket
   const [totalPrice, setTotalPrice] = useState(0) // total display for checkout basket
   const [totalQuantity, setTotalQuantity] = useState(0) // total display for checkout basket
-  const [previousResponse, setPreviousResponse] = useState(null); // helper hook to add/remove array of items to basket
-
+  
   // This is to do with router Outlet
   const pathParts = location.pathname.split('/');
   const categoryName = pathParts[2];
@@ -97,44 +96,43 @@ function App() {
   // API data fetching
   useEffect(() => {
     setLoading(true);
-
-    // Either get category or categories
     const fetchUrl = categoryName
       ? `https://fakestoreapi.com/products/category/${categoryName.toLowerCase()}`
       : 'https://fakestoreapi.com/products/categories';
 
     fetch(fetchUrl, { mode: "cors" })
-      .then((response) => {
+      .then(response => {
         if (response.status >= 400) {
           throw new Error("server error");
         }
         return response.json();
       })
-      .then((response) => {
-        if (JSON.stringify(response) !== JSON.stringify(previousResponse)) {
-          setPreviousResponse(response);
-
-          const processedResponse = Array.isArray(response) && typeof response[0] !== 'string'
-            ? response.map((basket) => ({
-              ...basket,
-              quantity: basket.quantity !== undefined ? basket.quantity : 0,
-            }))
-            : response;
-
-          // Set the basket to ALL categories plus add quantities and default them to 0 if undefined.
-
-          setBasket((prevBasket) => {
-            const newItems = processedResponse.filter(newItem => {
-              return !prevBasket.some(existingItem => existingItem.id === newItem.id);
+      .then(response => {
+        setCategory(response);
+        
+        // Only process products, not categories
+        if (Array.isArray(response) && typeof response[0] !== 'string') {
+          const newProducts = response.map(product => ({
+            ...product,
+            quantity: 0
+          }));
+          
+          // Merge new products with existing basket, preserving quantities
+          setBasket(prevBasket => {
+            const merged = [...prevBasket];
+            newProducts.forEach(newProduct => {
+              const existingIndex = merged.findIndex(item => item.id === newProduct.id);
+              if (existingIndex === -1) {
+                merged.push(newProduct);
+              }
             });
-            return [...prevBasket, ...newItems];
+            return merged;
           });
-          setCategory(response);
         }
       })
-      .catch((error) => setError(error))
+      .catch(error => setError(error))
       .finally(() => setLoading(false));
-  }, [categoryName, previousResponse]);
+  }, [categoryName]);
 
   // Outlet needs to pass props differently!
 
